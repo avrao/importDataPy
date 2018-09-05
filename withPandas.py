@@ -1,0 +1,345 @@
+#Importing data with Pandas
+# Import pandas as pd
+import pandas as pd
+
+# Assign the filename: file
+file = 'titanic.csv'
+
+# Read the file into a DataFrame: df
+df = pd.read_csv(file)
+
+# View the head of the DataFrame
+print(df.head())
+
+#ex with limited rows
+# Assign the filename: file
+file = 'digits.csv'
+
+# Read the first 5 rows of the file into a DataFrame: data
+data = pd.read_csv(file, nrows=5, header = None)
+
+# Build a numpy array from the DataFrame: data_array
+data_array = data.values
+
+# Print the datatype of data_array to the shell
+print(type(data_array))
+
+#ex corrupt file 
+
+ # Import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+
+# Assign filename: file
+file = 'titanic_corrupt.txt'
+
+# Import file: data
+data = pd.read_csv(file, sep='\t', comment='#', na_values=['Nothing'])
+
+# Print the head of the DataFrame
+
+print(data.head())
+
+# Plot 'Age' variable in a histogram
+pd.DataFrame.hist(data[['Age']])
+plt.xlabel('Age (years)')
+plt.ylabel('count')
+plt.show()
+
+#ex 
+# Import pickle package
+import pickle
+
+# Open pickle file and load data: d
+with open('data.pkl', 'rb') as file:
+    d = pickle.load(file)
+
+# Print d
+print(d)
+
+# Print datatype of d
+print(type(d))
+
+#ex excel sheets import
+# Import pandas
+import pandas as pd
+
+# Assign spreadsheet filename: file
+file = 'battledeath.xlsx'
+
+# Load spreadsheet: xl
+xl = pd.ExcelFile(file)
+
+# Print sheet names
+print(xl.sheet_names)
+
+#ex
+
+# Load a sheet into a DataFrame by name: df1
+
+df1 = xl.parse('2004')
+
+# Print the head of the DataFrame df1
+print(df1.head())
+
+# Load a sheet into a DataFrame by index: df2
+df2 = xl.parse(0)
+
+# Print the head of the DataFrame df2
+print(df2.head())
+
+#ex
+
+# Parse the first sheet and rename the columns: df1
+df1 = xl.parse(0, skiprows=[0], names=['Country', 'AAM due to War (2002)'])
+
+# Print the head of the DataFrame df1
+print(df1.head())
+
+# Parse the first column of the second sheet and rename the column: df2
+df2 = xl.parse(1, parse_cols=[0], skiprows=[0], names=['Country'])
+
+# Print the head of the DataFrame df2
+print(df2.head())
+
+#ex importing SAS files
+# Import sas7bdat package
+from sas7bdat import SAS7BDAT
+
+# Save file to a DataFrame: df_sas
+with SAS7BDAT('sales.sas7bdat') as file:
+    df_sas = file.to_data_frame()
+
+# Print head of DataFrame
+print(df_sas.head())
+
+# Plot histogram of DataFrame features (pandas and pyplot already imported)
+pd.DataFrame.hist(df_sas[['P']])
+plt.ylabel('count')
+plt.show()
+
+#ex 
+# Import pandas
+import pandas as pd
+
+# Load Stata file into a pandas DataFrame: df
+df = pd.read_stata('disarea.dta')
+
+# Print the head of the DataFrame df
+print(df.head())
+
+# Plot histogram of one column of the DataFrame
+pd.DataFrame.hist(df[['disa10']])
+plt.xlabel('Extent of disease')
+plt.ylabel('Number of countries')
+plt.show()
+
+#ex HDF5
+
+# Import packages
+import numpy as np
+import h5py
+
+# Assign filename: file
+file = 'LIGO_data.hdf5'
+
+# Load file: data
+data = h5py.File(file, 'r')
+
+# Print the datatype of the loaded file
+print(type(data))
+
+# Print the keys of the file
+for key in data.keys():
+    print(key)
+
+#ex
+# Import packages
+import numpy as np
+import h5py
+
+# Assign filename: file
+file = 'LIGO_data.hdf5'
+
+# Load file: data
+data = h5py.File(file, 'r')
+
+# Print the datatype of the loaded file
+print(type(data))
+
+# Print the keys of the file
+for key in data.keys():
+    print(key)
+
+# .mat files matrix laboratory
+# Import package
+import scipy.io
+
+# Load MATLAB file: mat
+mat = scipy.io.loadmat("albeck_gene_expression.mat")
+
+# Print the datatype type of mat
+print(type(mat))
+
+#ex 
+# Print the keys of the MATLAB dictionary
+print(mat.keys())
+
+# Print the type of the value corresponding to the key 'CYratioCyt'
+print(type(mat['CYratioCyt']))
+
+# Print the shape of the value corresponding to the key 'CYratioCyt'
+print(np.shape(mat['CYratioCyt']))
+
+# Subset the array and plot it
+data = mat['CYratioCyt'][25, 5:]
+fig = plt.figure()
+plt.plot(data)
+plt.xlabel('time (min.)')
+plt.ylabel('normalized fluorescence (measure of expression)')
+plt.show()
+
+#ex relational database 
+# Import necessary module
+from sqlalchemy import create_engine
+
+# Create engine: engine
+engine = create_engine("sqlite:///Chinook.sqlite")
+
+#ex table names
+# Import necessary module
+from sqlalchemy import create_engine
+
+# Create engine: engine
+engine = create_engine("sqlite:///Chinook.sqlite")
+
+# Save the table names to a list: table_names
+table_names = engine.table_names()
+
+# Print the table names to the shell
+print(table_names)
+
+
+#ex connecting to db
+# Import packages
+from sqlalchemy import create_engine
+import pandas as pd
+
+# Create engine: engine
+engine = create_engine('sqlite:///Chinook.sqlite')
+
+# Open engine connection: con
+con = engine.connect()
+
+# Perform query: rs
+rs = con.execute("SELECT * FROM Album")
+
+# Save results of the query to DataFrame: df
+df = pd.DataFrame(rs.fetchall())
+
+# Close connection
+
+con.close()
+# Print head of DataFrame df
+print(df.head())
+
+#ex 
+# Open engine in context manager
+# Perform query and save results to DataFrame: df
+with engine.connect() as con:
+    rs = con.execute("SELECT LASTNAME, TITLE FROM EMPLOYEE")
+    df = pd.DataFrame(rs.fetchmany(size=3))
+    df.columns = rs.keys()
+
+# Print the length of the DataFrame df
+print(len(df))
+
+# Print the head of the DataFrame df
+print(df.head())
+
+#ex db
+
+# Create engine: engine
+engine = create_engine("sqlite:///Chinook.sqlite")
+
+# Open engine in context manager
+# Perform query and save results to DataFrame: df
+with engine.connect() as con:
+    rs = con.execute("SELECT * FROM EMPLOYEE WHERE EMPLOYEEID >= 6")
+    df = pd.DataFrame(rs.fetchall())
+    df.columns = rs.keys()
+
+# Print the head of the DataFrame df
+print(df.head())
+
+#ex
+# Create engine: engine
+engine= create_engine("sqlite:///Chinook.sqlite")
+
+# Open engine in context manager
+with engine.connect() as con:
+    rs = con.execute("SELECT * FROM EMPLOYEE ORDER BY BIRTHDATE ASC ")
+    df = pd.DataFrame(rs.fetchall())
+
+    # Set the DataFrame's column names
+df.columns = rs.keys()
+
+# Print head of DataFrame
+print(df.head())
+
+
+#ex
+# Import packages
+from sqlalchemy import create_engine
+import pandas as pd
+
+# Create engine: engine
+engine = create_engine("sqlite:///Chinook.sqlite")
+
+# Execute query and store records in DataFrame: df
+df = pd.read_sql_query("SELECT * FROM ALBUM", engine)
+
+# Print head of DataFrame
+print(df.head())
+
+# Open engine in context manager and store query result in df1
+with engine.connect() as con:
+    rs = con.execute("SELECT * FROM Album")
+    df1 = pd.DataFrame(rs.fetchall())
+    df1.columns = rs.keys()
+
+# Confirm that both methods yield the same result
+print(df.equals(df1))
+
+ex
+# Import packages
+from sqlalchemy import create_engine
+import pandas as pd
+
+# Create engine: engine
+engine = create_engine("sqlite:///Chinook.sqlite")
+
+# Execute query and store records in DataFrame: df
+df = pd.read_sql_query("SELECT * FROM EMPLOYEE WHERE EMPLOYEEID >= 6 ORDER BY BIRTHDATE", engine)
+
+# Print head of DataFrame
+print(df.head())
+
+#ex
+# Open engine in context manager
+# Perform query and save results to DataFrame: df
+with engine.connect() as con:
+    rs = con.execute("SELECT TITLE,NAME FROM ALBUM INNER JOIN ARTIST ON ALBUM.ARTISTID = ARTIST.ARTISTID")
+    df = pd.DataFrame(rs.fetchall())
+    df.columns = rs.keys()
+
+# Print head of DataFrame df
+print(df.head())
+
+#ex
+# Execute query and store records in DataFrame: df
+df = pd.read_sql_query("SELECT * FROM PLAYLISTTRACK INNER JOIN TRACK ON PLAYLISTTRACK.TRACKID = TRACK.TRACKID WHERE TRACK.Milliseconds < 250000", engine)
+
+# Print head of DataFrame
+print(df.head())
+
+
